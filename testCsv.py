@@ -3,7 +3,6 @@ import tkinter as tk
 import tkinter.messagebox,tkinter.filedialog
 import pandas as pd
 import openpyxl as xl
-import pandas_profiling as pdp
 
 '''
 root = tk.Tk()
@@ -13,6 +12,8 @@ init_Dir = os.path.abspath(os.path.dirname(__file__))
 file = tk.filedialog.askopenfilename(filetypes = fTyp,initialdir = init_Dir)
 '''
 file = '140-0385-01_TA-01-140.csv'
+''''''
+
 df = pd.read_csv(file,header=None)
 
 df.columns = ['time','max_diam','min_diam','C','D','E','F','G','dist']
@@ -43,8 +44,12 @@ for index, row in df.iterrows():
     df.iat[index,9] = sec_dist
     df.iat[index,10] = now_dist_no
 
+grouped = df.groupby(['dist_no'])
+print(grouped.agg({'max_diam':'mean','min_diam':['mean','std'],'dist':'sum'}))
+
+'''
 file = file.replace('.csv','.xlsx')
 book = pd.ExcelWriter(file)
 df.to_excel(book,'test')
 book.save()
-
+'''
